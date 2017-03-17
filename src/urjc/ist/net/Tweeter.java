@@ -6,7 +6,8 @@ public class Tweeter implements Runnable {
 		// TODO Auto-generated constructor stub
 	}
 
-	private Counter counter;
+	private Counter counter; // mismo objeto para todos los hilos
+	
 	public Tweeter(Counter c){
 		counter = c;
 	}
