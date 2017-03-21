@@ -172,26 +172,27 @@ public class GestionPlayList {
 				PlayList resultanteAL = null;
 				for(PlayList elem : gestion){
 					if(elem.getNombrePlayList().equals(texto.nextLine())){
-						resultanteAL = elem;	
+						resultanteAL = elem;
+						try{
+							System.out.print("Indique en orden el titulo, el autor y su grupo: ");
+							
+							Scanner album = new Scanner(System.in);
+							String[] elAlbum = album.nextLine().split(" ");
+							// creamos la cancion
+							Album unAlbum = new Album(elAlbum[0],elAlbum[1],elAlbum[2]);
+							System.out.println("El album ha sido añadido:\n" + unAlbum);		
+							resultanteAL.addAlbum(unAlbum);
+							menu(g);
+							texto.close();
+							album.close(); // cerramos el scanner del album
+			
+						}catch(ArrayIndexOutOfBoundsException e){
+							System.err.print("Comrueba los datos : (titulo autor y grupo)");
+							crearAL(g);
+						}
 					}
 				}
-				try{
-					System.out.print("Indique en orden el titulo, el autor y su grupo: ");
-					
-					Scanner album = new Scanner(System.in);
-					String[] elAlbum = album.nextLine().split(" ");
-					// creamos la cancion
-					Album unAlbum = new Album(elAlbum[0],elAlbum[1],elAlbum[2]);
-					System.out.println("El album ha sido añadido:\n" + unAlbum);		
-					resultanteAL.addAlbum(unAlbum);
-					menu(g);
-					texto.close();
-					album.close(); // cerramos el scanner del album
-	
-				}catch(ArrayIndexOutOfBoundsException e){
-					System.err.print("Comrueba los datos : (titulo autor y grupo)");
-					crearAL(g);
-				}
+				
 				}else{
 				System.err.println(" No tienes playlist, primero tienes que crear una playList");
 				crearPL(g);
@@ -375,7 +376,6 @@ public class GestionPlayList {
 								for(Album elem2 : resultante.getPlayList()){
 									if(elem2.getTituloAlbum().equals(al.nextLine())){
 										resultanteAL = elem2;
-										
 										try{
 											System.out.print("Indique en orden el titulo, el autor, la duracion y su formato (MP3/FLAC/OGG): ");
 											Scanner cancion = new Scanner(System.in);
@@ -384,13 +384,18 @@ public class GestionPlayList {
 											Cancion unaCancion = new Cancion(laCancion[0],laCancion[1],Integer.parseInt(laCancion[2]),Codecs.valueOf(laCancion[3]));
 											resultanteAL.addTrack(unaCancion);
 											System.out.println("La cancion ha sido añadida.\n");
+											mostrarCN(g);
+											menu(g);
 											cancion.close(); // cerramos scanner
+											
 										}catch(NumberFormatException | ArrayIndexOutOfBoundsException ex2){
 											System.err.println(" Comprueba los datos : titulo Autor Duracion(en segundos) formato(MP3/FLAC/OGG) ");
 											crearCN(g);
 										}
+
 									}
 								}
+								
 								al.close();
 							}
 						}catch(NullPointerException e){
