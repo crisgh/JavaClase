@@ -176,7 +176,7 @@ public class PlayList {
 		 * Método que borra todas las canciones en la lista de
 		 * un álbum
 		 */
-		System.out.print("Has borrado la lista de reproduccion : " + getNombrePlayList());
+		System.out.print("Has borrado la lista de reproduccion : " + getNombrePlayList()+ "\n");
 		duracionTotalPlaylist = 0;
 		numCanciones = 0;
 		numAlbumes = 0;

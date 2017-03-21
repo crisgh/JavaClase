@@ -100,6 +100,7 @@ public class GestionPlayList {
 			System.err.println(" Has salido del rango, inténtalo de nuevo ");
 		}
 		resultante.clear();
+		gestion.remove(resultante);
 	}
 
 	public void modificarNombrePL(String nombre) {
@@ -580,6 +581,7 @@ public class GestionPlayList {
 			Scanner texto = new Scanner(System.in);
 			String nombre = texto.nextLine();
 			borrarPL(nombre);
+			menu(g);
 			break;
 			//AL -- album	
 		case 4:
