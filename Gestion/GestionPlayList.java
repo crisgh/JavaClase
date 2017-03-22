@@ -1,5 +1,6 @@
 package urjc.ist.playlist;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -58,7 +59,7 @@ public class GestionPlayList {
 		System.out.print("¿Cual quieres modificar?( Escriba el nombre de la playlist)");
 		Scanner texto = new Scanner(System.in);
 		String nombre = texto.nextLine();
-		texto.close(); // cerramos el scanner del nombre de la pl
+		//texto.close(); // cerramos el scanner del nombre de la pl
 		Scanner in = new Scanner ( System.in );	
 		System.out.println ( "1. Cambiar nombre de la PlayList    2. Borrar PlayList"
 				+ "\n3. Modificar albumnes(Añadir/Borrar)");
@@ -68,19 +69,21 @@ public class GestionPlayList {
 		case 1: //cambiar nombre
 			modificarNombrePL(nombre);
 			mostrarPL(g);
-			menu(g);
+			
 		case 2: // borrar playlist
 			borrarPL(nombre);
 			mostrarPL(g);
-			menu(g);
+	
 		case 3: // modificar los albumnes
 			modificarAL(g);
-			menu(g);
+			
 		default:
 			System.err.println ( "Elige una opcion válida" );
 			modificarPL(g);
 		}
+		menu(g);
 		in.close(); // cerramos scanner de las opciones
+		texto.close();
 	}
 
 
@@ -100,7 +103,6 @@ public class GestionPlayList {
 			System.err.println(" Has salido del rango, inténtalo de nuevo ");
 		}
 		resultante.clear();
-		gestion.remove(resultante);
 	}
 
 	public void modificarNombrePL(String nombre) {
@@ -394,6 +396,7 @@ public class GestionPlayList {
 											crearCN(g);
 										}
 
+
 									}
 								}
 								
@@ -560,14 +563,14 @@ public class GestionPlayList {
 
 
 	public void menu(GestionPlayList g) {
-		Scanner in = new Scanner ( System.in );	
+		Scanner inMenu = new Scanner ( System.in );	
 		System.out.println ( "1. Crear PlayList	2. Modificar PlayList	3. Borrar PlayList"
 				+ "\n4. Crear Album		5. Modificar Album	6. Borrar Album"
 				+ "\n7. Crear Cancion	8. Modificar Cancion	9. Borrar Cancion"
-				+ "\n10. Terminar " );
+				+ "\n10. Mostrar gestion	11. Guardar y terminar" );
 
 		System.out.println ( "¿Qué quieres hacer?: " );
-		switch ( in.nextInt() ) {
+		switch ( inMenu.nextInt()) {
 		// PL -- playList
 		case 1:
 			crearPL(g);
@@ -581,7 +584,6 @@ public class GestionPlayList {
 			Scanner texto = new Scanner(System.in);
 			String nombre = texto.nextLine();
 			borrarPL(nombre);
-			menu(g);
 			break;
 			//AL -- album	
 		case 4:
@@ -610,12 +612,60 @@ public class GestionPlayList {
 			Scanner texto3 = new Scanner(System.in);
 			String nombre3 = texto3.nextLine();
 			borrarCN(nombre3);
+		case 10:
+			mostrarG(g);
+			break;
+		case 11:
+			guardar(g);
+			break;
 		default:
 			System.err.println ( "Unrecognized option" );
 			break;
 		}
+		inMenu.close();
 		
+	}
+
+
+	
+	public void guardar(GestionPlayList g) {
 		
+		File carpeta =new File("Gestion");
+		carpeta.mkdir();
+		for(PlayList pl : gestion){
+			File directorio=new File(pl.getNombrePlayList());
+			directorio.mkdir();
+			for(Album al : pl.getPlayList()){
+				File directorio2=new File(al.getTituloAlbum());
+				directorio2.mkdir();
+				for (Cancion cn : al.getTrackList()){
+					File directorio3=new File(cn.getTitulo());
+					directorio3.mkdir();
+
+				}
+
+				
+			}
+		}
+		
+	}
+
+	public void mostrarG(GestionPlayList g) {
+		
+		if(gestion.size()!= 0){
+			System.out.println("Tienes estas PlayList:");
+			int i = 1;
+			for(PlayList pl: gestion){
+				System.out.println("\n-----------\n"
+						+ i + " -  PlayList : \n" + pl.toString()
+						+"\n-----------\n");
+			}
+
+		}else{
+			System.out.println("La gestion esta vacia\n");
+			menu(g);
+		}
+		menu(g);
 	}
 
 	public static void main(String[] args) {
