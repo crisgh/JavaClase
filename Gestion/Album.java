@@ -7,7 +7,7 @@ import java.util.Objects;
 import urjc.ist.playlist.Cancion;
 import urjc.ist.playlist.Cancion.Codecs;
 
-public class Album {
+public class Album implements java.io.Serializable{
 	/*  TODO Se pide completar la definición de la clase Album. Para ello, se puede consultar la URL sobre la clase de
 	 *  utilidad ArrayList, que permite crear arrays de cualquier tipo de objetos pero de longitud flexible (se pueden
 	 *  extender o acortar en tiempo de ejecución  

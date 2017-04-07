@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import urjc.ist.playlist.Cancion.Codecs;
 
-public class PlayList {
+public class PlayList implements java.io.Serializable{
 	private String nombre;
 	private int numCanciones;
 	private int numAlbumes;

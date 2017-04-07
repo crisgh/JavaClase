@@ -1,6 +1,19 @@
 package urjc.ist.playlist;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,17 +23,17 @@ import java.util.Scanner;
 import urjc.ist.playlist.Cancion.Codecs;
 
 
-public class GestionPlayList {
+
+public class GestionPlayList implements java.io.Serializable{
 	private   ArrayList<PlayList> gestion;
 
 	public GestionPlayList() {
-
 		gestion = new ArrayList<PlayList>();
 	}
 
 	//  ******************************* CREAR / MODIF / BORRAR PlayList ************************//
 
-	public void mostrarPL(GestionPlayList g ){
+	private void mostrarPL(GestionPlayList g ){
 		if(gestion.size()!= 0){
 			System.out.println("Tienes estas PlayList:");
 			int i = 1;
@@ -30,19 +43,17 @@ public class GestionPlayList {
 							+ i + " - "+ pl.getNombrePlayList() // solo mostramos el nombre
 							+ "    -----------\n");
 					i++;
-
 				}	
 			}catch(NullPointerException e){
 				System.err.println(" Has salido del rango, inténtalo de nuevo ");
 				menu(g);
 			}
-
 		}else{
 			System.out.println("No tienes PlayList aun");
 		}
 	}
 
-	public void crearPL(GestionPlayList g) {
+	private void crearPL(GestionPlayList g) {
 		mostrarPL(g);
 		System.out.print("¿Que nombre quieres poner a la PlayList? ");
 		Scanner texto = new Scanner(System.in);
@@ -51,11 +62,9 @@ public class GestionPlayList {
 		System.out.println(pl.getNombrePlayList() + ": ha sido creada.");		
 		gestion.add(pl);
 		menu(g);
-		//texto.close(); // cerramos el scanner
-
 	}
 
-	public void modificarPL(GestionPlayList g) {
+	private void modificarPL(GestionPlayList g) {
 		mostrarPL(g);
 		System.out.print("¿Cual quieres modificar?( Escriba el nombre de la playlist)");
 		Scanner texto = new Scanner(System.in);
@@ -93,9 +102,7 @@ public class GestionPlayList {
 		//texto.close();
 	}
 
-
-
-	public void borrarPL(String nombre) {
+	private void borrarPL(String nombre) {
 
 		PlayList resultante = null;
 		try{
@@ -105,17 +112,14 @@ public class GestionPlayList {
 					resultante.clear();
 					gestion.remove(resultante);
 					break;
-
 				}
 			}
-
 		}catch(NullPointerException e){
 			System.err.println(" Has salido del rango, inténtalo de nuevo ");
 		}
-
 	}
 
-	public void modificarNombrePL(String nombre) {
+	private void modificarNombrePL(String nombre) {
 
 		PlayList resultante;
 		try{
@@ -129,22 +133,15 @@ public class GestionPlayList {
 					//texto.close();//cerramos scanner
 				}
 			}
-
 		}catch(NullPointerException e){
 			System.err.println(" Has salido del rango, inténtalo de nuevo ");
-
 		}
 
 	}
 
-
-	//	public void add(PlayList pl) {
-	//		gestion.add(pl);
-	//	}
-	//	
 	// ****************** CREAR / MODIF / BORRAR ALBUM ******************** //
 
-	public void mostrarAL(GestionPlayList g ){
+	private void mostrarAL(GestionPlayList g ){
 		if(gestion.size()!= 0){
 			System.out.println("Tienes estas PlayList:");
 			int i = 1;
@@ -173,8 +170,7 @@ public class GestionPlayList {
 		}
 	}
 
-	public void crearAL(GestionPlayList g) {
-
+	private void crearAL(GestionPlayList g) {
 
 		try{
 			if(gestion.size() != 0){
@@ -186,9 +182,7 @@ public class GestionPlayList {
 					PlayList resultanteAL = null;
 					if(elem.getNombrePlayList().equals(nombrepl)){
 						resultanteAL = elem;
-
-
-						try{
+				try{
 							//System.out.println(" tengo que añadir a " + resultanteAL);
 							System.out.print("Indique en orden el titulo, el autor y su grupo: ");
 
@@ -207,7 +201,7 @@ public class GestionPlayList {
 						}
 					}
 				}
-				texto.close();
+				//texto.close();
 			}else{
 				System.err.println(" No tienes playlist, primero tienes que crear una playList");
 				crearPL(g);
@@ -218,7 +212,7 @@ public class GestionPlayList {
 		}
 	}
 
-	public void modificarNombreAL(String nombre) {
+	private void modificarNombreAL(String nombre) {
 		String answer; // nos saca el valor de la respuesta
 		try{
 			for(PlayList pl : gestion){
@@ -276,17 +270,14 @@ public class GestionPlayList {
 					}catch(NullPointerException e){
 						e.getMessage();
 					}
-
-
 				}
 			}
 		}catch(NullPointerException e){
 			e.getMessage();
 		}
-
 	}
 
-	public void modificarAL(GestionPlayList g) {
+	private void modificarAL(GestionPlayList g) {
 		mostrarAL(g);
 		System.out.print("¿Cual quieres modificar?( Escriba el nombre de la playlist del album) : ");
 		Scanner textoALMod = new Scanner(System.in);
@@ -313,23 +304,18 @@ public class GestionPlayList {
 			System.err.println ( "Elige una opcion válida" );
 			modificarAL(g);
 		}
-		// cerramos los scanner para no tener problemas
-		textoALMod.close();
-		inALMod.close();
-
+		// cerramos los scanner 
+		//		textoALMod.close();
+		//		inALMod.close();
 	}
 
-
-	public void borrarAL(String nombre) {
+	private void borrarAL(String nombre) {
 		PlayList resultante = null;
 		Album resultanteAL = null;
 		try{
-
 			for(PlayList pl : gestion){
-
 				if(pl.getNombrePlayList().equals(nombre)){
 					resultante = pl;	
-
 					try{
 						int pos = 0;
 						System.out.print("Escribia el album que quieres borrar: ");
@@ -351,9 +337,6 @@ public class GestionPlayList {
 						System.err.println("No tienes albumnes, crea uno para poder borrarlo");
 					}
 				}
-
-
-
 			}
 
 		}catch(NullPointerException e ){
@@ -361,10 +344,9 @@ public class GestionPlayList {
 		}
 	}
 
-
 	// ********** CREAR / MODIFICAR / BORRAR CANCIONES ************ //
 
-	public void mostrarCN(GestionPlayList g ){
+	private void mostrarCN(GestionPlayList g ){
 		if(gestion.size()!= 0){
 			System.out.println("Tienes estas PlayList:");
 			int i = 1;
@@ -384,17 +366,15 @@ public class GestionPlayList {
 					}
 					System.out.println( "\n-----------\n");
 					i++;
-
 				}
 			}
-
 		}else{
 			System.err.println("No tienes PlayList aun, primero tienes que crearla");
 			crearPL(g);
 		}
 	}
-	public void crearCN(GestionPlayList g) {
 
+	private void crearCN(GestionPlayList g) {
 
 		if(gestion.size() != 0){
 			mostrarAL(g);
@@ -438,20 +418,15 @@ public class GestionPlayList {
 										System.err.println(" Comprueba los datos : titulo Autor Duracion(en segundos) formato(MP3/FLAC/OGG) ");
 										crearCN(g);
 									}
-
-
 								}else{
 									System.err.println("No tienes ese album, el nombre debe ir sin espacios");
 									crearCN(g);
-
 								}
 							}
-
 							//al.close();
 						}else{
 							System.err.println(" No tienes albumnes, primero tienes que crear uno");
 							crearAL(g);
-
 						}
 					}catch(NoSuchElementException  e){
 						System.err.println("No tienes ese album, el nombre debe ir sin espacios");
@@ -466,7 +441,7 @@ public class GestionPlayList {
 		}
 	}
 
-	public void modificarCN(GestionPlayList g) {
+	private void modificarCN(GestionPlayList g) {
 		mostrarCN(g);
 		System.out.println("¿Cual quieres modificar?( Escriba el nombre de playlist de la cancion)");
 		Scanner textoCNMod = new Scanner(System.in);
@@ -490,7 +465,8 @@ public class GestionPlayList {
 		//textoCNMod.close();
 		//inCNMod.close();
 	}
-	public void modificarNombreCN(String nombre) {
+
+	private void modificarNombreCN(String nombre) {
 		String answer;
 		if (gestion.size() != 0){ // comprobamos que haya pl
 			for(PlayList pl : gestion){	
@@ -590,11 +566,10 @@ public class GestionPlayList {
 		}
 	}
 
-	public void borrarCN(String nombre) {
+	private void borrarCN(String nombre) {
 		try{
 			for(PlayList pl : gestion){	
 				if(pl.getNombrePlayList().equals(nombre)){
-					
 					try{
 						System.out.print("Escriba el album : ");
 						Scanner album = new Scanner(System.in);
@@ -614,10 +589,10 @@ public class GestionPlayList {
 											break;
 										}else{
 											System.err.println("No existe esa cancion");
-											
+
 										}
-									
-									i++;
+
+										i++;
 									}
 								}catch(NullPointerException e){
 									System.err.println("No hay canciones, primero tendrias que crearla");
@@ -649,12 +624,12 @@ public class GestionPlayList {
 		System.out.println ( "1. Crear PlayList	2. Modificar PlayList	3. Borrar PlayList"
 				+ "\n4. Crear Album		5. Modificar Album	6. Borrar Album"
 				+ "\n7. Crear Cancion	8. Modificar Cancion	9. Borrar Cancion"
-				+ "\n10. Mostrar gestion	11. Guardar y terminar" );
+				+ "\n10. Mostrar gestion	11. Guardar y terminar	12. Cargar gestion guardada" );
 
 		System.out.println ( "¿Qué quieres hacer?: " );
 		Scanner inMenu = new Scanner ( System.in );	
 		int menu = inMenu.nextInt();
-		try{
+		
 			switch (menu) {
 			// PL -- playList
 			case 1:
@@ -703,67 +678,150 @@ public class GestionPlayList {
 				break;
 			case 10:
 				mostrarG(g);
+				menu(g);
 				break;
 			case 11:
-				guardar(g);
+				try {
+					guardar(g);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.out.println("Terminado.");
 				break;
+			case 12:
+				cargar();
+				break;
+	
 			default:
 				System.err.println ( "Unrecognized option" );
 				break;
 			}
-			//inMenu.close(
-		}catch(NoSuchElementException e){
-			g.menu(g);
-		}
+			//inMenu.close();
+		
 	}
 
 
 
-	public void guardar(GestionPlayList g) {
-		
-		File carpetaGestion =new File("Gestion");
+	private void cargar()  {
+	
+			File archivo = new File ("Gestion/gestion.txt"); 
+			GestionPlayList lista = new GestionPlayList();
+	        try{
+		        ObjectInputStream ficheroEntrada = new ObjectInputStream(new FileInputStream(archivo));
+	            lista = (GestionPlayList)ficheroEntrada.readObject();
+	            System.out.println(lista.mostrarG(lista)); 
+                lista.menu(lista);
+                ficheroEntrada.close();
+                
+	        }catch(ClassNotFoundException | FileNotFoundException fnfe) {
+	           System.err.println("Fallo al cargar.");
+	        } catch (IOException ioe){
+	        	System.err.println("IO");
+	        }	
+	}
+
+	private final void guardar(GestionPlayList g) throws IOException {
+		File carpetaGestion =new File("Gestion"); // Crea la carpeta donde iran las otras carpetas
 		carpetaGestion.mkdir();
+		if (!gestion.isEmpty()) {
+    			File archivo = new File (carpetaGestion+"/gestion.txt");
+                ObjectOutputStream ficheroSalida = new ObjectOutputStream(new FileOutputStream(archivo));
+                ficheroSalida.writeObject((GestionPlayList)g);
+                ficheroSalida.flush();
+                ficheroSalida.close();
+                System.out.println("Datos guardados correctamente en " + archivo + ".");
+        } else {
+             System.out.println("No hay datos que guardar. La lista está vacía. ");
+        }
 		for(PlayList pl : gestion){
 			File dirPL=new File(carpetaGestion + "/" + pl.getNombrePlayList());
 			dirPL.mkdir();
+			Path archPL = Paths.get(carpetaGestion + "/" + pl.getNombrePlayList()+"/"+ pl.getNombrePlayList()+".txt");
+			try {
+				Files.createFile(archPL);
+				byte[] buf =("PlayList :\n" + pl.toString()).getBytes();
+				Files.write(archPL, buf);
+			} catch (FileAlreadyExistsException x) {
+				System.err.format("Error : el fichero ya existe. Sera borrado y guardado de nuevo\n");
+				try {
+					Files.delete(archPL);
+					guardar(g);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} catch (IOException x) {
+				System.err.format("Error de permisos sobre el fichero");
+			}
 			for(Album al : pl.getPlayList()){
 				File dirAL =new File(dirPL+"/"+ al.getTituloAlbum());
 				dirAL.mkdir();
+				Path archAL = Paths.get(dirPL + "/" + al.getTituloAlbum()+"/"+ al.getTituloAlbum()+".txt");
+				try {
+					Files.createFile(archAL);
+					
+					byte[] buf =("PlayList : " + pl.getNombrePlayList() +"\n"   
+								+ al.toString()).getBytes();
+					
+					Files.write(archAL, buf);
+				} catch (FileAlreadyExistsException x) {
+					System.err.format("Error : el fichero ya existe. Sera borrado y guardado de nuevo\n");
+					try {
+						Files.delete(archAL);
+						guardar(g);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} catch (IOException x) {
+					System.err.format("Error de permisos sobre el fichero");
+				}
 				for (Cancion cn : al.getTrackList()){
 					File dirCN =new File( dirAL + "/"+cn.getTitulo());
 					dirCN.mkdir();
-
+					Path archCN = Paths.get(dirAL + "/" + cn.getTitulo()+"/"+ cn.getTitulo()+".txt");
+					try {
+						Files.createFile(archCN);
+						byte[] buf =("PlayList : " + pl.getNombrePlayList()  
+									+ "\nAlbum : " + al.getTituloAlbum()
+									+ cn.toString()).getBytes();
+						Files.write(archCN, buf);
+					} catch (FileAlreadyExistsException x) {
+						System.err.format("Error : el fichero ya existe. Sera borrado y guardado de nuevo\n");
+						try {
+							Files.delete(archCN);
+							guardar(g);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					} catch (IOException x) {
+						System.err.format("Error de permisos sobre el fichero");
+					}
 				}
-
-
 			}
 		}
-
 	}
-
-	public void mostrarG(GestionPlayList g) {
-
+    
+	private String mostrarG(GestionPlayList g) {
+		String laGestion = "";
 		if(gestion.size()!= 0){
 			System.out.println("Tienes estas PlayList:");
 			int i = 1;
 			for(PlayList pl: gestion){
-				System.out.println("\n-----------\n"
+				laGestion = laGestion + ("\n-----------\n"
 						+ i + " -  PlayList : \n" + pl.toString()
 						+"\n-----------\n");
 				i++;
 			}
-
+			System.out.println(laGestion);
 		}else{
-			System.out.println("La gestion esta vacia\n");
-			menu(g);
+			laGestion =("La gestion esta vacia\n");
 		}
-		menu(g);
+		return laGestion;
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
 		GestionPlayList g = new GestionPlayList();
 		g.menu(g);
 	}
-
 }

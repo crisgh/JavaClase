@@ -1,6 +1,6 @@
 package urjc.ist.playlist;
 import java.util.Objects;
-public class Cancion {
+public class Cancion implements java.io.Serializable {
 	
 	public enum Codecs {
 		/*
