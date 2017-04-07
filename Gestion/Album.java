@@ -86,12 +86,9 @@ public class Album {
 		 * Método que devuelve la lista de canciones actualmente
 		 * incluídas en el álbum
 		 */
-		if (trackList.size()>0){
+		
 			return trackList;
-		}else{
-			System.out.println(" El album no tiene canciones");
-			return trackList;
-		}
+		
 	}
 	public Cancion getTrack(int posicion) {
 		/**

@@ -18,7 +18,7 @@ public class PlayList {
 		nombre = "";
 		numCanciones = 0;
 		numAlbumes = 0;
-		duracionTotalPlaylist = 0;
+		duracionTotalPlaylist = getDuracionTotalPlayList();
 		playList = new ArrayList<Album>();
 	}
 	
@@ -69,6 +69,10 @@ public class PlayList {
 	//--- DURACION TOTAL ---//
 
 	public int getDuracionTotalPlayList() {
+		for(Album elem : playList){
+			duracionTotalPlaylist = duracionTotalPlaylist + elem.getDuracionTotal();
+			
+		}
 		
 		return duracionTotalPlaylist;
 	}
@@ -78,13 +82,9 @@ public class PlayList {
 		 * Método que devuelve la lista de Albumes actualmente
 		 * incluídas en el álbum
 		 */
-		if (playList.size()>0){
-			return playList;
-		}else{
-			//System.out.print(" (esta playlist no tiene ningun album)\n");
-			playList = null;
-			return playList;
-		}
+			
+				return playList;
+			
 	}
 	
 	//--- AÑADIR ALBUM SIN POSICION---//
@@ -176,7 +176,7 @@ public class PlayList {
 		 * Método que borra todas las canciones en la lista de
 		 * un álbum
 		 */
-		System.out.print("Has borrado la lista de reproduccion : " + getNombrePlayList()+ "\n");
+		System.out.println("Has borrado la lista de reproduccion : " + getNombrePlayList());
 		duracionTotalPlaylist = 0;
 		numCanciones = 0;
 		numAlbumes = 0;
@@ -188,6 +188,9 @@ public class PlayList {
 	
 	@Override
 	public String toString() {
+		for (Album elem: playList){
+			numCanciones = numCanciones + elem.getCanciones();
+		}
 		int duracionLista = getDuracionTotalPlayList();
 		int hours = duracionLista / 3600;
 		int minutes = (duracionLista % 3600) / 60;
@@ -244,6 +247,11 @@ public class PlayList {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
+//		PlayList pl = new PlayList("pl");
+//		Album al = new Album();
+//		
+//		System.out.println(pl);
+		
 		PlayList playList1 = new PlayList("myList"); // uso de equals y hashCode
 		PlayList playList2 = new PlayList("myList"); // uso de equals y hashCode
 		PlayList playList3 = new PlayList("my SecondList"); // para borrar
